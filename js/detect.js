@@ -1,7 +1,7 @@
 window.timeCount = [Date.now()];
 import { FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
 
-(async () => {
+let initialize = async () => {
     const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
     window.media = await FaceDetector.createFromOptions(vision, {
         baseOptions: {
@@ -11,4 +11,6 @@ import { FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@med
     });
     timeCount.push(Date.now());
     setTimeout(() => window.dispatchEvent(new Event('initialized')), 400);
-})();
+};
+
+initialize();
