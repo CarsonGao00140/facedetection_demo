@@ -4,7 +4,7 @@
 }
 
 header {
-    width: 50vw;
+    width: calc(100vh/8*5);
     margin: auto;
     position: relative;
 }

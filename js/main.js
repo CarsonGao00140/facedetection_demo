@@ -13,13 +13,12 @@ if (!userInput) {
     })();
 }
 
-let initialized = new Promise((resolve, reject) => {
+let initialized = new Promise((resolve) => {
     window.addEventListener('initialized', resolve);
 });
 
-let imgloaded = new Promise((resolve, reject) => {
+let imgloaded = new Promise((resolve) => {
     img.onload = () => {
-        console.log("Image has loaded");
         resolve();
     };
 });
@@ -30,26 +29,30 @@ let imgloaded = new Promise((resolve, reject) => {
     overLayer.viewBox.baseVal.width = img.naturalWidth;
     overLayer.viewBox.baseVal.height = img.naturalHeight;
     let content = new DocumentFragment;
-    let face = media.detect(img).detections[0];
-    if (!face) {
-        alert("No face detected");
-        window.location.reload();
+    let faces = media.detect(img).detections;
+    for (face of faces) {
+        let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("x", face.boundingBox.originX);
+        rect.setAttribute("y", face.boundingBox.originY);
+        rect.setAttribute("width", face.boundingBox.width);
+        rect.setAttribute("height", face.boundingBox.height);
+        content.appendChild(rect);
+        for (point of face.keypoints) {
+            let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", point.x * img.naturalWidth);
+            circle.setAttribute("cy", point.y * img.naturalHeight);
+            circle.setAttribute("r", "1");
+            content.appendChild(circle);
+        }
+        overLayer.append(content);
+        text.textContent = (face.categories[0].score * 100).toFixed(1) + "%";
+        text.style.top = (face.boundingBox.originY + face.boundingBox.height) / img.naturalHeight * 100 + "%";
+        text.style.left = face.boundingBox.originX/ img.naturalWidth * 100 + "%";
     }
-    let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("x", face.boundingBox.originX);
-    rect.setAttribute("y", face.boundingBox.originY);
-    rect.setAttribute("width", face.boundingBox.width);
-    rect.setAttribute("height", face.boundingBox.height);
-    content.appendChild(rect);
-    for (point of face.keypoints) {
-        let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("cx", point.x * img.naturalWidth);
-        circle.setAttribute("cy", point.y * img.naturalHeight);
-        circle.setAttribute("r", "1");
-        content.appendChild(circle);
+    if (!faces.length) {
+        setTimeout(() => {
+            alert("No face detected!");
+            window.location.reload();
+        }, 250);
     }
-    overLayer.append(content);
-    text.textContent = (face.categories[0].score * 100).toFixed(1) + "%";
-    text.style.top = (face.boundingBox.originY + face.boundingBox.height) / img.naturalHeight * 100 + "%";
-    text.style.left = face.boundingBox.originX/ img.naturalWidth * 100 + "%";
 })();
