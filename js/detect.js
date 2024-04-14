@@ -6,11 +6,13 @@ let initialize = async () => {
     window.media = await FaceDetector.createFromOptions(vision, {
         baseOptions: {
             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite`,
-            delegate: "GPU"
+            delegate: "GPU",
+            min_detection_confidence: 0.75
         },
     });
     timeCount.push(Date.now());
-    setTimeout(() => window.dispatchEvent(new Event('initialized')), 400);
+    // setTimeout(() => window.dispatchEvent(new Event('initialized')), 0);
+    window.dispatchEvent(new Event('initialized'));
 };
 
 initialize();

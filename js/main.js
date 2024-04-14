@@ -1,13 +1,17 @@
 let img = document.getElementById("image");
 let overLayer = document.getElementById("overlay");
 let text = document.getElementById("text");
-let userInput = prompt("Paste the image link:", "https://pixabay.com/get/g0080dc78cf05efca32ab8ec07c5c7e84c68e8d72316e2b75233fd8acf8c14e4276422be7e997fa0aa390d92c946df49a66e3bd7bcc50560ff452b4b4fd6b5be3_1280.jpg");
+let userInput = prompt("Paste the image link, or leave it blank to load my selfie:");
 
-(async () => {
-    let response = await fetch(userInput);
-    let blob = await response.blob();
-    img.src = URL.createObjectURL(blob);
-})();
+if (!userInput) {
+    img.src = "./img/Carson.png";
+} else {
+    async () => {
+        let response = await fetch(userInput);
+        let blob = await response.blob();
+        img.src = URL.createObjectURL(blob);
+    };
+}
 
 window.addEventListener('initialized', () => {
     let loadtime = timeCount[1] - timeCount[0];
@@ -24,12 +28,12 @@ window.addEventListener('initialized', () => {
     for (point of face.keypoints) {
         let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", point.x * img.naturalWidth);
-         circle.setAttribute("cy", point.y * img.naturalHeight);
+        circle.setAttribute("cy", point.y * img.naturalHeight);
         circle.setAttribute("r", "1");
         content.appendChild(circle);
     }
         content.appendChild(rect);
-    overLayer.replaceChildren(content);
+    overLayer.append(content);
     text.textContent = (face.categories[0].score * 100).toFixed(1) + "%";
     text.style.top = (face.boundingBox.originY + face.boundingBox.height) / img.naturalHeight * 100 + "%";
     text.style.left = face.boundingBox.originX/ img.naturalWidth * 100 + "%";
