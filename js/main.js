@@ -25,7 +25,6 @@ let imgloaded = new Promise((resolve) => {
 
 (async () => {
     await Promise.all([initialized, imgloaded]);
-    console.log("Both events have been fired");
     overLayer.viewBox.baseVal.width = img.naturalWidth;
     overLayer.viewBox.baseVal.height = img.naturalHeight;
     let content = new DocumentFragment;
