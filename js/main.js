@@ -10,9 +10,8 @@ let userInput = prompt("Paste the image link:", "https://pixabay.com/get/g0080dc
 })();
 
 window.addEventListener('initialized', () => {
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - loadtime;
-    console.log(elapsedTime);
+    let loadtime = timeCount[1] - timeCount[0];
+    console.log(loadtime + "ms");
     overLayer.viewBox.baseVal.width = img.naturalWidth;
     overLayer.viewBox.baseVal.height = img.naturalHeight;
     let content = new DocumentFragment;

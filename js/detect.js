@@ -1,5 +1,5 @@
+window.timeCount = [Date.now()];
 import { FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
-window.loadtime = Date.now();
 
 (async () => {
     const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
@@ -9,5 +9,6 @@ window.loadtime = Date.now();
             delegate: "GPU"
         },
     });
-    setTimeout(() => window.dispatchEvent(new Event('initialized')), 200);
+    timeCount.push(Date.now());
+    setTimeout(() => window.dispatchEvent(new Event('initialized')), 400);
 })();
