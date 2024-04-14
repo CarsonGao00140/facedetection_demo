@@ -1,0 +1,38 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+header {
+    width: 75vw;
+    margin: auto;
+    position: relative;
+    container-type: inline-size;
+}
+
+img,svg {
+    width: 100%;
+}
+
+svg {
+    fill: red;
+    stroke: red;
+    rect {
+        fill: none;
+        stroke-width: .75%;
+    }
+    circle {
+        stroke-width: 1.25%;
+    }
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: red;
+    position: absolute;
+}
