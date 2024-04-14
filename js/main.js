@@ -6,25 +6,41 @@ let userInput = prompt("Paste the image link, or leave it blank to load my selfi
 if (!userInput) {
     img.src = "./img/Carson.png";
 } else {
-    async () => {
+    (async () => {
         let response = await fetch(userInput);
         let blob = await response.blob();
         img.src = URL.createObjectURL(blob);
-    };
+    })();
 }
 
-window.addEventListener('initialized', () => {
-    let loadtime = timeCount[1] - timeCount[0];
-    console.log(loadtime + "ms");
+let initialized = new Promise((resolve, reject) => {
+    window.addEventListener('initialized', resolve);
+});
+
+let imgloaded = new Promise((resolve, reject) => {
+    img.onload = () => {
+        console.log("Image has loaded");
+        resolve();
+    };
+});
+
+(async () => {
+    await Promise.all([initialized, imgloaded]);
+    console.log("Both events have been fired");
     overLayer.viewBox.baseVal.width = img.naturalWidth;
     overLayer.viewBox.baseVal.height = img.naturalHeight;
     let content = new DocumentFragment;
     let face = media.detect(img).detections[0];
+    if (!face) {
+        alert("No face detected");
+        window.location.reload();
+    }
     let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect.setAttribute("x", face.boundingBox.originX);
     rect.setAttribute("y", face.boundingBox.originY);
     rect.setAttribute("width", face.boundingBox.width);
     rect.setAttribute("height", face.boundingBox.height);
+    content.appendChild(rect);
     for (point of face.keypoints) {
         let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", point.x * img.naturalWidth);
@@ -32,9 +48,8 @@ window.addEventListener('initialized', () => {
         circle.setAttribute("r", "1");
         content.appendChild(circle);
     }
-        content.appendChild(rect);
     overLayer.append(content);
     text.textContent = (face.categories[0].score * 100).toFixed(1) + "%";
     text.style.top = (face.boundingBox.originY + face.boundingBox.height) / img.naturalHeight * 100 + "%";
     text.style.left = face.boundingBox.originX/ img.naturalWidth * 100 + "%";
-});
+})();

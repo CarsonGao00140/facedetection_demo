@@ -4,10 +4,9 @@
 }
 
 header {
-    width: 75vw;
+    width: 50vw;
     margin: auto;
     position: relative;
-    container-type: inline-size;
 }
 
 img,svg {
