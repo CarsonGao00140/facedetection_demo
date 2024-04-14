@@ -8,5 +8,4 @@ import { FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@med
             delegate: "GPU"
         },
     });
-    window.dispatchEvent(new Event('initialized'));
 })();
