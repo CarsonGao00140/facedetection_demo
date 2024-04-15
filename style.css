@@ -1,4 +1,11 @@
 header {
+    display: flex;
+    gap: .5rem;
+    width: 45vw;
+    margin: 1rem auto;
+}
+
+main {
     width: 45vw;
     margin: auto;
     position: relative;
